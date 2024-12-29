@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 工地安全知识问答系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const avatar = document.querySelector('.user-avatar');
+        const dropdown = document.querySelector('.dropdown-content');
+
+        avatar.addEventListener('click', function (event) {
+            event.stopPropagation(); // 阻止事件冒泡
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // 点击页面其他区域时隐藏悬浮窗
+        document.addEventListener('click', function () {
+            dropdown.style.display = 'none';
+        });
+    });
+</script>
+</head>
+<body>
+    <div class="user-avatar">
+        <div class="avatar-initials">{{ username|first|upper }}</div>
+        <div class="dropdown-content">
+            <a href="{{ url_for('logout') }}">退出登录</a>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h1>AI 工地安全知识问答系统</h1>
+        <form method="POST" action="/submit">
+            {% for question in questions %}
+            <div>
+                <p><strong>问题 {{ loop.index }}：</strong> {{ question['question'] }}</p>
+
+                {% if question['type'] == 'single_choice' %}
+                <p>（单选题）</p>
+                {% set question_id = loop.index %}
+                {% for option in question['options'] %}
+                    <label>
+                        <input type="radio" name="answer_{{ question_id }}" value="{{ option|first }}" required>
+                        {{ option }}
+                    </label><br>
+                {% endfor %}
+
+                {% elif question['type'] == 'multiple_choice' %}
+                <p>（多选题）</p>
+                {% set question_id = loop.index %}
+                {% for option in question['options'] %}
+                    <label>
+                        <input type="checkbox" name="answer_{{ question_id }}[]" value="{{ option|first }}">
+                        {{ option }}
+                    </label><br>
+                {% endfor %}
+
+                {% elif question['type'] == 'short_answer' %}
+                <p>（简答题）</p>
+                <textarea name="answer_{{ loop.index }}" required></textarea>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit">提交答案</button>
+        </form>
+    </div>
+</body>
+</html>

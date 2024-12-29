@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工地安全手册</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            background-color: #f4f4f4;
+            font-size: 18px; /* 调大字体 */
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #d4af37; /* 左边栏颜色调整为 #d4af37 */
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px; /* 调大字体 */
+        }
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 18px; /* 调大字体 */
+        }
+        .sidebar ul li a:hover {
+            background-color: #b5942d; /* 悬停时颜色稍深 */
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        .content h2 {
+            color: #333;
+            font-size: 28px; /* 调大字体 */
+        }
+        .content p {
+            color: #555;
+            line-height: 1.8; /* 增加行高 */
+            font-size: 18px; /* 调大字体 */
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #d4af37; /* 按钮颜色调整为 #d4af37 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #b5942d; /* 悬停时颜色稍深 */
+        }
+    </style>
+</head>
+<body>
+    <!-- 左侧目录 -->
+    <div class="sidebar">
+        <h2>目录</h2>
+        <ul>
+            <li><a href="#preface">前言</a></li>
+            <li><a href="#ppe">个人防护装备（PPE）</a></li>
+            <li><a href="#rules">工地规则</a></li>
+            <li><a href="#training">安全培训</a></li>
+            <li><a href="#high-altitude">高空作业安全</a></li>
+            <li><a href="#electrical">电气安全</a></li>
+            <li><a href="#machinery">机械设备操作规范</a></li>
+            <li><a href="#fire">消防安全</a></li>
+            <li><a href="#chemicals">危险化学品管理</a></li>
+            <li><a href="#emergency">紧急事故处理</a></li>
+            <li><a href="#health">卫生与健康</a></li>
+            <li><a href="#reporting">报告与记录</a></li>
+            <li><a href="#conclusion">结语</a></li>
+        </ul>
+    </div>
+
+    <!-- 右侧内容 -->
+    <div class="content" id="content">
+        <div id="preface">
+            <h2>前言</h2>
+            <p>本《工地安全手册》旨在为所有在建筑工地工作的人员提供必要的安全指导，以确保每个人的安全和健康。安全无小事，请务必认真阅读并严格遵守以下规定。</p>
+        </div>
+
+        <div id="ppe">
+            <h2>1. 个人防护装备（PPE）</h2>
+            <p>进入工地必须佩戴安全帽，确保松紧适中且佩戴正确。</p>
+            <p>根据工作性质选择适当的防护装备，如护目镜、防滑靴、手套等。</p>
+            <p>高噪音环境下需佩戴耳罩；粉尘或有毒环境下需使用呼吸面罩；高空作业必须佩戴安全带并确保固定牢靠。</p>
+            <p>定期检查个人防护装备的完好性，发现损坏应立即更换。</p>
+        </div>
+
+        <div id="rules">
+            <h2>2. 工地规则</h2>
+            <p>严禁饮酒或服用影响判断力的药物后进入工地。</p>
+            <p>遵守所有警示标志和指示牌的指引。</p>
+            <p>禁止在工地奔跑、追逐打闹或进行任何危险行为。</p>
+            <p>未经许可，不得操作重型机械或其他专业设备。</p>
+        </div>
+
+        <div id="training">
+            <h2>3. 安全培训</h2>
+            <p>新入职员工必须参加全面的安全培训，了解工地基本规范和应急预案。</p>
+            <p>定期参加公司组织的安全演习，例如火灾逃生演练和急救培训。</p>
+            <p>熟悉工作岗位相关的具体安全操作要求。</p>
+        </div>
+
+        <div id="high-altitude">
+            <h2>4. 高空作业安全</h2>
+            <p>作业前确保安全带、安全绳和作业平台牢固可靠。</p>
+            <p>禁止单独进行高空作业，必须至少两人配合作业。</p>
+            <p>作业区域周围设置安全标志，禁止非相关人员进入。</p>
+            <p>风速超过6级时禁止进行高空作业。</p>
+        </div>
+
+        <div id="electrical">
+            <h2>5. 电气安全</h2>
+            <p>严禁私自接线、改装电气设施或擅自拆卸设备。</p>
+            <p>使用电动工具时，必须确保电源线无破损且接地良好。</p>
+            <p>所有临时电缆应合理铺设，避免凌乱摆放或裸露。</p>
+            <p>触电事故发生时，切勿直接接触伤者，应立即断电并报警。</p>
+        </div>
+
+        <div id="machinery">
+            <h2>6. 机械设备操作规范</h2>
+            <p>每天开始作业前，检查设备是否正常运行，无松动或损坏现象。</p>
+            <p>非专业人员严禁操作起重设备和其他复杂机械。</p>
+            <p>在机械作业区域内，禁止闲杂人员靠近，以免发生意外。</p>
+            <p>严格按照设备操作手册要求进行作业，发现故障应立即停机并报告。</p>
+        </div>
+
+        <div id="fire">
+            <h2>7. 消防安全</h2>
+            <p>工地必须配备足够数量的灭火器，确保灭火器在有效期内且操作良好。</p>
+            <p>禁止在工地吸烟，焊接作业需执行严格的防火措施。</p>
+            <p>易燃易爆物品应存放在指定区域，并定期检查存储环境的安全性。</p>
+            <p>熟悉工地的消防逃生路线和紧急集合点位置。</p>
+        </div>
+
+        <div id="chemicals">
+            <h2>8. 危险化学品管理</h2>
+            <p>所有化学品必须存放在指定位置，并确保容器密封良好。</p>
+            <p>使用化学品时，必须穿戴适当的防护装备，如防护手套、防护服等。</p>
+            <p>确保工作区域通风良好，避免吸入有害气体。</p>
+            <p>处理化学品泄漏时，按公司应急程序操作，并报告主管。</p>
+        </div>
+
+        <div id="emergency">
+            <h2>9. 紧急事故处理</h2>
+            <p>发生紧急事故时，立即停止作业，确保人员安全，并向主管报告。</p>
+            <p>伤害事故：进行急救后立即送医，严重情况拨打120求助。</p>
+            <p>火灾事故：小火用灭火器扑救；无法控制的火势，应迅速撤离并拨打119报警。</p>
+            <p>设备故障：停止设备运行，保护现场，等待专业人员检查处理。</p>
+        </div>
+
+        <div id="health">
+            <h2>10. 卫生与健康</h2>
+            <p>保持个人清洁卫生，勤洗手，防止病菌传播。</p>
+            <p>在高温或严寒作业条件下，注意饮食和休息，避免中暑或受寒。</p>
+            <p>如果感觉身体不适，应及时就医，并向管理层报告以避免传染性疾病的传播。</p>
+        </div>
+
+        <div id="reporting">
+            <h2>11. 报告与记录</h2>
+            <p>发现安全隐患或发生事故后，应及时填写事故报告单，说明详细情况。</p>
+            <p>所有的安全培训、会议记录和事故报告都需归档保存，以备后续查阅和分析。</p>
+            <p>根据安全记录，针对性地改进安全措施，确保安全管理的持续提升。</p>
+        </div>
+
+        <div id="conclusion">
+            <h2>结语</h2>
+            <p>工地安全是每一个人的责任。请大家共同遵守规章制度，维护一个安全、高效的工作环境。对违反安全规定的人员，公司将按照政策采取严肃处理措施。让我们共同努力，实现“安全生产、人人有责”的目标！</p>
+        </div>
+
+        <a href="/" class="button">返回主页</a>
+    </div>
+
+    <script>
+        // 平滑滚动到对应部分
+        document.querySelectorAll('.sidebar ul li a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

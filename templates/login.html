@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            font-size: 18px;
+        }
+        .container {
+            display: flex;
+            background-color: white;
+            width: 1200px;
+            height: 600px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .login-form {
+            padding: 40px;
+            height: 600px;
+            width: 800px;
+        }
+        .login-form h2 {
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            font-size: 28px; /* 增大标题字体 */
+        }
+        .login-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+             font-size: 20px; /* 增大标签字体 */
+        }
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 12px; /* 增大输入框内边距 */
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 18px; /* 增大输入框字体 */
+        }
+        .login-form input[type="submit"] {
+            width: 100%;
+            padding: 12px; /* 增大按钮内边距 */
+            margin-top: 50px;
+            margin-bottom: 30px;
+            background-color: #d4af37;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 20px; /* 增大按钮字体 */
+            cursor: pointer;
+        }
+        .login-form input[type="submit"]:hover {
+            background-color: #bc8c25;
+        }
+        .login-form a {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #d4af37;
+            text-decoration: none;
+            ont-size: 18px; /* 增大链接字体 */
+        }
+        .login-form a:hover {
+            text-decoration: underline;
+        }
+        .register-side {
+            background-image: url("static/images/1.jpg");
+            background-size: cover;
+            background-position: center;
+            height: 600px;
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        .register-side a {
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease-in-out;
+            margin-top: 20px;
+        }
+        .register-side a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-form">
+            <h2>登录</h2>
+            <form method="POST" action="/login">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" required>
+                <input type="submit" value="登录">
+                <a href="#forgot-password">忘记密码？</a>
+            </form>
+        </div>
+        <div class="register-side">
+            <h3>还未注册？</h3>
+            <p>加入我们，一起加油！</p>
+            <a href="/register">注册</a>
+        </div>
+    </div>
+</body>
+</html>

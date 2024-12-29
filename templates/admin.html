@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI工地安全知识问答系统</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            font-size: 18px; /* 全局字体变大 */
+        }
+        .user-avatar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+        .avatar-initials {
+            width: 40px;
+            height: 40px;
+            background-color: #d4af37;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px; /* 头像字体变大 */
+            font-weight: bold;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1;
+            font-size: 18px; /* 下拉菜单字体变大 */
+        }
+        .dropdown-content a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+            padding: 5px 0;
+        }
+        .dropdown-content a:hover {
+            color: #d4af37;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .header {
+            background-color: white;
+            color: #d4af37;
+            font-size: 32px; /* 标题字体变大 */
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: -20px -20px 20px -20px;
+            font-weight: bold; /* 标题字体加粗 */
+        }
+        .nav-container {
+            width: 200px;
+            margin-right: 20px;
+            background-color: #d4af37;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .nav-item {
+            margin-top: 50px;
+            cursor: pointer;
+            padding: 12px 20px;
+            border-radius: 5px;
+            background-color: #d4af37;
+            color: white;
+            font-size: 20px; /* 导航项字体变大 */
+            margin-bottom: 10px;
+            transition: background-color 0.3s, color 0.3s;
+            font-weight: bold; /* 导航项字体加粗 */
+        }
+        .nav-item.active {
+            background-color: white;
+            color: #d4af37;
+        }
+        .nav-item:hover {
+            background-color: white;
+            color: #d4af37;
+        }
+        .content {
+            flex: 1;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 20px; /* 表格字体变大 */
+        }
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        table th {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            font-size: 18px; /* 模态框字体变大 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .close {
+            float: right;
+            cursor: pointer;
+            font-size: 24px;
+            color: #333;
+        }
+        .close:hover {
+            color: #d4af37;
+        }
+        .question-options {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 5px;
+            font-size: 18px; /* 选项字体变大 */
+        }
+        .question-options li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="user-avatar">
+        <div class="avatar-initials">{{ username|first|upper }}</div>
+        <div class="dropdown-content">
+            <a href="/logout">退出登录</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 标题 -->
+        <div class="header">AI工地安全知识问答系统</div>
+
+        <div style="display: flex;">
+            <!-- 左侧导航栏 -->
+            <div class="nav-container">
+                <div id="records-nav" class="nav-item active">答题记录</div>
+                <div id="accuracy-nav" class="nav-item">正确率分析</div>
+            </div>
+
+            <!-- 内容部分 -->
+            <div class="content">
+                <!-- 答题记录部分 -->
+                <div id="records-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>用户名</th>
+                                <th>得分</th>
+                                <th>日期</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in records %}
+                            <tr>
+                                <td>{{ record[1] }}</td>
+                                <td>{{ record[2] }}</td>
+                                <td>{{ record[3]}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 正确率分析部分 -->
+                <div id="accuracy-section" class="chart-container" style="display: none;">
+
+
+                    <h2>单选题</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>题目</th>
+                                <th>正确答案</th>
+                                <th>错误答案</th>
+                                <th>正确率 (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in accuracy if item.type == 'single_choice' %}
+                            <tr class="accuracy-row" data-question="{{ item.question }}" data-correct-answer="{{ item.correct_answer }}" data-incorrect-answers="{{ item.incorrect_answers|join('|') }}" data-correct-rate="{{ item.correct_rate }}" data-question-type="{{ item.type }}" data-options="{{ item.options|join('|') }}">
+                                <td>
+                                    {{ item.question }}
+                                    {% if item.options %}
+                                        <ul class="question-options">
+                                            {% for option in item.options %}
+                                                <li>{{ option }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </td>
+                                <td>{{ item.correct_answer }}</td>
+                                <td>
+                                    {% for answer in item.incorrect_answers %}
+                                        {{ answer }}<br>
+                                    {% endfor %}
+                                </td>
+                                <td>{{ item.correct_rate | round(2) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                <h2>简答题</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>题目</th>
+                                <th>正确答案</th>
+                                <th>错误答案</th>
+                                <th>正确率 (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in accuracy if item.type == 'short_answer' %}
+                            <tr class="accuracy-row" data-question="{{ item.question }}" data-correct-answer="{{ item.correct_answer }}" data-incorrect-answers="{{ item.incorrect_answers|join('|') }}" data-correct-rate="{{ item.correct_rate }}" data-question-type="{{ item.type }}">
+                                <td>{{ item.question }}</td>
+                                <td>{{ item.correct_answer }}</td>
+                                <td>
+                                    {% for answer in item.incorrect_answers %}
+                                        {{ answer }}<br>
+                                    {% endfor %}
+                                </td>
+                                <td>{{ item.correct_rate | round(2) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-question"></h2>
+            <p><strong>正确答案:</strong> <span id="modal-correct-answer"></span></p>
+            <p><strong>错误答案:</strong> <span id="modal-incorrect-answer"></span></p>
+            <p><strong>正确率:</strong> <span id="modal-correct-rate"></span>%</p>
+            <div id="modal-options"></div>
+            <canvas id="modal-chart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // 显示/隐藏答题记录和正确率分析部分
+        document.getElementById('records-nav').addEventListener('click', function() {
+            document.getElementById('records-section').style.display = 'block';
+            document.getElementById('accuracy-section').style.display = 'none';
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            this.classList.add('active');
+        });
+
+        document.getElementById('accuracy-nav').addEventListener('click', function() {
+            document.getElementById('records-section').style.display = 'none';
+            document.getElementById('accuracy-section').style.display = 'block';
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            this.classList.add('active');
+        });
+
+        // 初始化时默认显示答题记录
+        document.getElementById('records-section').style.display = 'block';
+        document.getElementById('accuracy-section').style.display = 'none';
+
+        // 用户头像点击事件
+        document.querySelector('.user-avatar').addEventListener('click', function() {
+            const dropdown = document.querySelector('.dropdown-content');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // 点击页面其他区域时隐藏悬浮窗
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdown-content');
+            if (!event.target.closest('.user-avatar')) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // 点击正确率分析表格行时显示模态框
+        document.querySelectorAll('.accuracy-row').forEach(row => {
+            row.addEventListener('click', function() {
+                const modal = document.getElementById('modal');
+                const question = this.getAttribute('data-question');
+                const correctAnswer = this.getAttribute('data-correct-answer');
+                const incorrectAnswers = this.getAttribute('data-incorrect-answers').split('|');
+                const correctRate = parseFloat(this.getAttribute('data-correct-rate'));
+                const questionType = this.getAttribute('data-question-type');
+                const options = this.getAttribute('data-options')?.split('|') || [];
+
+                // 更新模态框内容
+                document.getElementById('modal-question').innerText = question;
+                document.getElementById('modal-correct-answer').innerText = correctAnswer;
+                document.getElementById('modal-incorrect-answer').innerText = incorrectAnswers.join('\n');
+                document.getElementById('modal-correct-rate').innerText = correctRate.toFixed(2);
+
+                // 显示单选题的选项
+                const modalOptions = document.getElementById('modal-options');
+                if (questionType === 'single_choice' && options.length > 0) {
+                    modalOptions.innerHTML = `<strong>选项:</strong><ul class="question-options">${options.map(option => `<li>${option}</li>`).join('')}</ul>`;
+                } else {
+                    modalOptions.innerHTML = '';
+                }
+
+                // 绘制图表
+                const ctx = document.getElementById('modal-chart').getContext('2d');
+                if (window.myChart) {
+                    window.myChart.destroy(); // 销毁之前的图表实例
+                }
+                window.myChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['正确率', '错误率'],
+                        datasets: [{
+                            data: [correctRate, 100 - correctRate],
+                            backgroundColor: ['#d4af37', '#f4c23d'] // 图表颜色与主色系相近
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    font: {
+                                        size: 18 // 图表字体变大
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // 显示模态框
+                modal.style.display = 'flex';
+            });
+        });
+
+        // 关闭模态框
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('modal').style.display = 'none';
+        });
+
+        // 点击模态框外部时关闭模态框
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>答题结果</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .button {
+            padding: 10px 20px;
+            background-color: #d4af37; /* 按钮颜色调整为 #d4af37 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #b5942d; /* 悬停时颜色稍深 */
+        }
+    </style>
+</head>
+<body>
+    <div class="user-avatar">
+        <div class="avatar-initials">{{ username|first|upper }}</div>
+        <div class="dropdown-content">
+            <a href="/logout">退出登录</a>
+            <a href="/">返回主页</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>答题结果</h1>
+        <p>用户名：{{ username }}</p>
+        <p>得分：{{ score }} / {{ total }}</p>
+        <a href="{{ url_for('safety_manual') }}" class="button">查看工地安全手册</a>
+        <button onclick="downloadResults()" class="button">保存答题结果</button>
+        {% for result in results %}
+        <div>
+            <hr>
+            <p><strong>问题 {{ loop.index }}：</strong> {{ result.question }}</p>
+            <p><strong>你的答案：</strong> {{ result.user_answer if result.user_answer else "未作答" }}</p>
+            <p><strong>正确答案：</strong> {{ result.correct_answer if result.correct_answer else "无" }}</p>
+            <p><strong>解析：</strong> {{ result.explanation }}</p>
+            <p><strong>结果：</strong> {{ "正确" if result.is_correct else "错误" }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        async function downloadResults() {
+            // 获取结果内容
+            const username = "{{ username }}";
+            const score = "{{ score }}";
+            const total = "{{ total }}";
+            const results = JSON.parse('{{ results | tojson | safe }}');
+
+            // 构建下载内容
+            let content = `用户名：${username}\n得分：${score} / ${total}\n\n`;
+            results.forEach((result, index) => {
+                content += `问题 ${index + 1}：${result.question}\n`;
+                content += `你的答案：${result.user_answer || "未作答"}\n`;
+                content += `正确答案：${result.correct_answer || "无"}\n`;
+                content += `解析：${result.explanation}\n`;
+                content += `结果：${result.is_correct ? "正确" : "错误"}\n\n`;
+            });
+
+            // 使用 FileSystemAccess API 保存文件
+            try {
+                const handle = await window.showSaveFilePicker({
+                    suggestedName: '答题结果.txt',
+                    types: [{
+                        description: 'Text Files',
+                        accept: { 'text/plain': ['.txt'] },
+                    }],
+                });
+                const writable = await handle.createWritable();
+                await writable.write(content);
+                await writable.close();
+                alert('文件保存成功！');
+            } catch (err) {
+                console.error('文件保存失败:', err);
+                alert('文件保存失败，请重试。');
+            }
+        }
+    </script>
+</body>
+</html>
